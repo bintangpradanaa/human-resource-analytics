@@ -5,17 +5,17 @@ import plotly.express as px
 import matplotlib as plt
 import seaborn as sns
 
-# ===============================
-# STREAMLIT LAYOUT & TITLE
-# ===============================
+# =======
+# LAYOUT
+# =======
 st.set_page_config(layout="wide")
 
 st.markdown('<div style="text-align: center;font-size:42px;font-weight:bold;line-height:1.5; color:#1D4ED8;">📊 HR DASHBOARD</div>', unsafe_allow_html=True)
 st.markdown("")
 
-# ===============================
+# ================
 # GLOBAL STYLING
-# ===============================
+# ================
 st.markdown("""
 <style>
 
@@ -56,14 +56,14 @@ h1, h2, h3 {
 """, unsafe_allow_html=True)
 
 
-# LOAD & PREPARE DATA
+# LOAD DATA
 csv_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTQyERWzY558YfSVl-9PpWL_EJszeOYxx-aqt2Maav1dQmyKXl3G7wy7SlSk2EMpg/pub?output=csv"
 df = pd.read_csv(csv_url)
 
-# konversi kolom 
+# year
 df["DateofHire"] = pd.to_datetime(df["DateofHire"], errors="coerce")
 df["DateofTermination"] = pd.to_datetime(df["DateofTermination"], errors="coerce")
-# tambahan kolom tahun
+
 df["HireYear"] = df["DateofHire"].dt.year
 df["TermYear"] = df["DateofTermination"].dt.year
 # masa kerja (tahun)
@@ -77,9 +77,7 @@ df["TenureYears"] = np.where(
 df["PayRate"] = df["PayRate"].fillna(0)
 df["MonthlyPay"] = df["PayRate"] * 160
 
-# ===============================
-# SIDEBAR FILTER
-# ===============================
+# Sidebar Filter
 st.sidebar.header("📅 Filter Data")
 years = sorted(pd.concat([df["HireYear"], df["TermYear"]], ignore_index=True).dropna().astype(int).unique(),reverse=True)
 selected_year = st.sidebar.selectbox("Select Year", years, index=0)
@@ -99,7 +97,7 @@ active_prev = df[
     (df["EmploymentStatus"].str.lower() == "active")
 ]
 
-# karyawan yang keluar pada tahun itu
+# Karyawan yang keluar pada tahun itu
 term_curr = df[df["TermYear"] == selected_year]
 term_prev = df[df["TermYear"] == prev_year]
 
@@ -107,8 +105,7 @@ st.sidebar.markdown(
     """
     <div style="display: flex; flex-direction: column; height: 55vh; justify-content: space-between; text-align: justify; margin: 10px 0px">
         <div style="font-size: 11px; font-style:italic; color: var(--text-color); opacity:0.65;">
-            *This filter updates the dashboard based on the selected year, affecting KPI Scorecards, 
-            Employee & Project Distribution by Department, Workforce Score & Satisfaction, and Workforce Demographics
+            *This filter applies to the KPI Scorecards, Employee & Project Distribution by Department, Workforce Score & Satisfaction, and Workforce Demographics.
         </div>
         <div style="text-align: center; font-size: 16px; font-weight: bold; color: #1D4ED8;">
             Dashboard by<br>BIRU TEAM
@@ -161,13 +158,13 @@ avg_salary_curr = avg_monthly_pay(df, selected_year)
 avg_salary_prev = avg_monthly_pay(df, prev_year)
 salary_change = ((avg_salary_curr - avg_salary_prev) / avg_salary_prev * 100) if avg_salary_prev > 0 else 0
 
-# usia karyawan
+# usia
 if "Age" not in df.columns:
     df["Age"] = ((pd.to_datetime("today") - pd.to_datetime(df["DOB"], errors="coerce")).dt.days / 365.25).round(1)
 
-# ===============================
+# =====
 # TAB
-# ===============================
+# =====
 tab1, tab2 = st.tabs(["🧭 Executive Summary", "🗂️ Employee Details"])
 st.markdown("""
 <style>
@@ -186,9 +183,9 @@ st.markdown("""
 # ===============================
 
 with tab1:
-    # ===============================
+    # ==================
     # 0. KPI SCORECARDS
-    # ===============================
+    # ==================
     st.markdown("<h4>🎯 KPI Scorecards</h4>", unsafe_allow_html=True)
 
     # list data KPI
@@ -300,9 +297,9 @@ with tab1:
         unsafe_allow_html=True)
     st.markdown("---")
 
-    # ===============================
+    # ===================
     # 1. Employee Trend
-    # ===============================
+    # ===================
     st.markdown("<br>", unsafe_allow_html=True)
     col_note, col_filter = st.columns([3, 1])
 
@@ -478,9 +475,9 @@ with tab1:
     else:
         st.warning("No data available for the selected metric and period.")
         
-    # ===============================
+    # ================
     # 2. Term Reason
-    # ===============================
+    # ================
     st.markdown("<br>", unsafe_allow_html=True)
     col_note, col_filter = st.columns([3, 1])
 
@@ -522,9 +519,9 @@ with tab1:
         min_reason_row = term_reason_counts.loc[term_reason_counts["Count"].idxmin()]
         st.write(f"⬆️ Most common reason: **{max_reason_row['Reason']}** with **{max_reason_row['Count']}** employees")
     
-    # ===============================
+    # ================================================
     # 3. Employee & Project Distribution by Department
-    # ===============================
+    # ================================================
     st.markdown("<h4>🏢 Employee & Project Distribution by Department</h4>", unsafe_allow_html=True)
     st.markdown("This section provides an overview of employee and project distribution across departments.")
     col1, col2 = st.columns(2, gap="medium")
@@ -597,9 +594,9 @@ with tab1:
             st.write(f"⬆️ Most: **{proj_max['Department']}** ({proj_max['SpecialProjectsCount']}) projects")
             st.write(f"⬇️ Fewest: **{proj_min['Department']}** ({proj_min['SpecialProjectsCount']}) projects")
 
-    # ===============================
+    # ==================================
     # 4. Workforce Score & Satisfaction
-    # ===============================
+    # ==================================
     st.markdown("<h4>📑 Workforce Score & Satisfaction</h4>", unsafe_allow_html=True)
     st.markdown("This section shows the distribution of performance, engagement, and satisfaction scores for active employees.", unsafe_allow_html=True)
     col1, col2, col3 = st.columns(3)
@@ -688,9 +685,9 @@ with tab1:
         avg_satis = active_curr['EmpSatisfaction'].mean()
         st.write(f"😃 Average Employee Satisfaction is **{avg_satis:.2f}**, with the most common score being **{most_satis}**.")
     
-    # ===============================
+    # =======================
     # 5. DEMOGRAFI KARYAWAN
-    # ===============================
+    # =======================
     col_filter_demo1, col_filter_demo2 = st.columns([3, 1])
     with col_filter_demo1:
         st.markdown("<h4>👨‍👩‍👧‍👦 Workforce Demographic</h4>", unsafe_allow_html=True)
@@ -794,7 +791,7 @@ with tab1:
                 marital_counts,
                 y="Marital Status",
                 x="Count",
-                color="Count",  # Gunakan Count untuk color scale
+                color="Count",
                 color_continuous_scale=palette,
                 text="Count",
                 orientation='h'
@@ -806,7 +803,7 @@ with tab1:
                 height=300,
                 margin=dict(t=20,b=40,l=120,r=20),
                 showlegend=False,
-                coloraxis_showscale=False,  # Sembunyikan color scale
+                coloraxis_showscale=False, 
                 xaxis=dict(range=[0, marital_counts["Count"].max()*1.2])
             )
             st.plotly_chart(fig_marital, use_container_width=True)
@@ -829,7 +826,7 @@ with tab1:
                 st.write(f"⚥ Majority of {title_suffix.lower()} employees are **{most_gender}** ({most_gender_count} employees, {gender_ratio:.1f}%)")
             
             # Age insights
-            st.write(f"⏳ Most {title_suffix.lower()} employees are in the **{most_common_age_range}** age range ({most_common_age_count} employees).")
+            st.write(f"⏳ Most {title_suffix.lower()} employees are in the **{most_common_age_range}** age range ({most_common_age_count} employees)")
 
             # Marital Status insights
             marital_counts = data_source["MaritalDesc"].value_counts()
@@ -840,9 +837,9 @@ with tab1:
         else:
             st.write("No data available for the selected filters")
     
-# ===============================
+# =====================
 # B. EMPLOYEE DETAILS
-# ===============================
+# =====================
 detail_df = df.copy()
 with tab2:
     st.markdown("#### 🪪 Employee Directory")
