@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
-import matplotlib as plt
-import seaborn as sns
 
 # =======
 # LAYOUT
@@ -105,7 +103,8 @@ st.sidebar.markdown(
     """
     <div style="display: flex; flex-direction: column; height: 55vh; justify-content: space-between; text-align: justify; margin: 10px 0px">
         <div style="font-size: 11px; font-style:italic; color: var(--text-color); opacity:0.65;">
-            *This filter applies to the KPI Scorecards, Employee & Project Distribution by Department, Workforce Score & Satisfaction, and Workforce Demographics.
+            *This filter updates the dashboard based on the selected year, affecting KPI Scorecards, Employee Termination Reasons,
+            Employee & Project Distribution by Department, Workforce Score & Satisfaction, and Workforce Demographics
         </div>
         <div style="text-align: center; font-size: 16px; font-weight: bold; color: #1D4ED8;">
             Dashboard by<br>BIRU TEAM
@@ -475,22 +474,23 @@ with tab1:
     else:
         st.warning("No data available for the selected metric and period.")
         
-    # ================
+    # ===============================
     # 2. Term Reason
-    # ================
+    # ===============================
     st.markdown("<br>", unsafe_allow_html=True)
     col_note, col_filter = st.columns([3, 1])
 
     with col_note:
         st.markdown("<h4>⚠️ Employee Termination Reasons</h4>", unsafe_allow_html=True)
-        st.markdown("This visualization shows the distribution of reasons why employees left the company.", unsafe_allow_html=True)
-    with col_filter:
-        st.write("")
-
-    left_employees = df[df["TermYear"].notna()].copy()
-    term_reason_counts = left_employees["TermReason"].value_counts().reset_index()
+        st.markdown("This section visualizes the distribution of employee termination reasons for the year.", unsafe_allow_html=True)
+        
+    term_reason_counts = (
+        term_curr["TermReason"]
+        .value_counts()
+        .reset_index()
+    )
     term_reason_counts.columns = ["Reason", "Count"]
-    
+
     theme = st.get_option("theme.base")
     fig_tt = px.treemap(
         term_reason_counts,
@@ -500,24 +500,21 @@ with tab1:
         color_continuous_scale="Reds",
         title=""
     )
-    if theme == "light":
-        fig_tt.update_layout(
-            width=500, height=320,
-            margin=dict(t=20, b=20, l=20, r=20)
-        )
-    else:
-        fig_tt.update_layout(
-            width=500, height=320,
-            margin=dict(t=20, b=20, l=20, r=20)
-        )
+
+    fig_tt.update_layout(
+        width=500, height=320,
+        margin=dict(t=20, b=20, l=20, r=20)
+    )
 
     st.plotly_chart(fig_tt, use_container_width=True)
 
-    # Insight utama Term Reason
-    with st.expander("⚡Quick Insight Termination Reasons (All Years)"):
-        max_reason_row = term_reason_counts.loc[term_reason_counts["Count"].idxmax()]
-        min_reason_row = term_reason_counts.loc[term_reason_counts["Count"].idxmin()]
-        st.write(f"⬆️ Most common reason: **{max_reason_row['Reason']}** with **{max_reason_row['Count']}** employees")
+    # Insight Utama Term Reason
+    with st.expander(f"⚡Quick Insight Termination Reasons ({selected_year})"):
+        if not term_reason_counts.empty:
+            max_reason_row = term_reason_counts.loc[term_reason_counts["Count"].idxmax()]
+            st.write(f"⬆️ Most common reason: **{max_reason_row['Reason']}** **({max_reason_row['Count']} employees)**")
+        else:
+            st.write("No termination data for this year.")
     
     # ================================================
     # 3. Employee & Project Distribution by Department
