@@ -1,12 +1,8 @@
 # Human Resource Analytics
 
-<p align="center">
-  <img src="images/dashboard.jpg" alt="Dataset Preview" width="1000"/>
-</p>
-
 ## Resource
-- 📊 [View Dashboard](https://hr-analytics-dashboard-biru-team.streamlit.app/)
-- 📑 [Presentation Deck](https://drive.google.com/drive/u/0/folders/1omimYr9c4J_ZQLg98GtKNPSmoKQMUMmC)
+- 📊 [Dashboard](https://hr-analytics-dashboard-biru-team.streamlit.app/)
+- 📑[Presentation Deck](https://drive.google.com/drive/u/0/folders/1omimYr9c4J_ZQLg98GtKNPSmoKQMUMmC
   
 ## Project Overview
 A US-based company with thousands of employees across multiple departments needs to better understand its workforce dynamics, including employee profile, performance, satisfaction, and workforce movement.
@@ -17,13 +13,6 @@ As a **Data Analyst**, I was tasked with analyzing HR data and building an inter
 - Understand current workforce condition  
 - Identify turnover patterns and key drivers  
 - Analyze workforce movement (hiring & turnover trends)  
-
-## Data
-- [Dataset](https://docs.google.com/spreadsheets/d/1dhmNKk8NcMLKfm0YnAMaFk1Hkh4TjsW5/edit?rtpof=true&sd=true)
-
-<p align="center">
-  <img src="images/hr-database.jpg" alt="Dataset Preview" width="1000"/>
-</p>
 
 ## Tools
 - Python  
