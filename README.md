@@ -3,7 +3,7 @@
 ## Resource
 - 📊 [Dashboard](https://hr-analytics-dashboard-biru-team.streamlit.app/)
 - 📑[Presentation Deck](https://drive.google.com/drive/u/0/folders/1omimYr9c4J_ZQLg98GtKNPSmoKQMUMmC)
-- 💻 [Code](https://github.com/bintangpradanaa/human-resource-analytics/code)
+- 💻 [Code](https://github.com/bintangpradanaa/human-resource-analytics/blob/main/code/HR_Analytics.ipynb)
   
 ## Project Overview
 A US-based company with thousands of employees across multiple departments needs to better understand its workforce dynamics, including employee profile, performance, satisfaction, and workforce movement.
