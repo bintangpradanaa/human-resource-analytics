@@ -1,8 +1,8 @@
 # Human Resource Analytics
 
 ## Resource
-- 📊 [Dashboard](https://hr-analytics-dashboard-biru-team.streamlit.app/)
-- 📑[Presentation Deck](https://drive.google.com/drive/u/0/folders/1omimYr9c4J_ZQLg98GtKNPSmoKQMUMmC)
+- 📊 [Dashboard Streamlit](https://hr-analytics-dashboard-biru-team.streamlit.app/)
+- 📑 [Presentation Deck](https://drive.google.com/drive/u/0/folders/1omimYr9c4J_ZQLg98GtKNPSmoKQMUMmC)
 - 💻 [Code](https://github.com/bintangpradanaa/human-resource-analytics/blob/main/code/HR_Analytics.ipynb)
   
 ## Project Overview
